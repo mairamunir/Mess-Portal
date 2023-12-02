@@ -36,6 +36,22 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.delete('/DeleteStudent/:username', (req, res) => {
+  const username = req.params.username;
+  const query = 'DELETE FROM users WHERE username = ?';
+  db.query(query, [username], (err, result) => {
+    if (err) {
+      console.error('Error deleting student:', err);
+      res.status(500).send('Error deleting student');
+    } else {
+      console.log('Student deleted:', result);
+      res.status(200).send('Student deleted successfully');
+    }
+  });
+});
+
+
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
