@@ -1,0 +1,28 @@
+.container {
+  margin-top: 150px;
+  max-width: 400px;
+  padding: 50px 100px;
+  border: 1px dashed black;
+  border-radius: 7px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  }
+  
+  .button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  margin-left: 10px;
+  }
+  .back-button {
+    position: absolute;
+  bottom: 110px; 
+  left: 62%; 
+  transform: translateX(-50%); 
+  width: 100px; 
+  height: 30px; 
+  margin-left: 10px; 
+  }

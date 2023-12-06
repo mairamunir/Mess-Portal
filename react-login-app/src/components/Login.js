@@ -1,24 +1,13 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import './Login.css'; // Import the CSS file
-import HomeAdmin from './HomeAdmin';
-import HomeStudent from './HomeStudent';
 
-
-const Login = (props) => {
+const Login = ({ setUserDetails }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  let name = "25252";
-
-  const obj = {
-    abc: "xyz"
-  }
-
   const handleLogin = async () => {
     try {
-      console.log('attempting login'); //comment later
       const response = await fetch('http://localhost:3005/login', {
         method: 'POST',
         headers: {
@@ -27,28 +16,17 @@ const Login = (props) => {
         body: JSON.stringify({ username, password }),
       });
 
-      console.log('login req sent');// comment later
-
       const data = await response.json();
-      console.log('recieved response',data);//comment later
-      const success = data.success;
-      const userDetails = data.userDetails;
-      
-      if (success) {
-        props.setUserDetails(userDetails);
 
-        //redirect to respective page
-        if(userDetails.role==='admin'){
-          return <HomeAdmin/>;
-        }
-        else if (userDetails.role==='student'){
-          return <HomeStudent/>
-        }
+      if (data.success) {
+        setUserDetails(data.userDetails);
+        setMessage('');
+      } else {
+        setMessage(data.message);
       }
-      setMessage(data.message);
-    } catch (e) {
-      console.error('error during login',e);
-      
+    } catch (error) {
+      console.error('Error during login:', error);
+      setMessage('Login failed. Please try again.');
     }
   };
 
@@ -59,11 +37,13 @@ const Login = (props) => {
       <input
         type="text"
         placeholder="ERP/ADMIN"
+        value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
         type="password"
         placeholder="Password"
+        value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>

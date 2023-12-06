@@ -35,22 +35,38 @@ app.post('/login', (req, res) => {
     }
   });
 });
-
-app.delete('/DeleteStudent/:username', (req, res) => {
-  const username = req.params.username;
+//delete student
+app.post('/DeleteStudent', async(req, res)=>{
+  const {username}=req.body;
   const query = 'DELETE FROM users WHERE username = ?';
-  db.query(query, [username], (err, result) => {
+   db.query(query, [username], (err, result) => {
+     if (err) {
+       console.error('Error deleting student:', err);
+       res.status(500).send('Error deleting student');
+     } else if (checkResult.length === 0) {
+      //Student not found, return a 404 status and error message
+     res.status(404).send('Student not found'); }
+     else {
+       console.log('Student deleted:', result);
+       res.status(200).send('Student deleted successfully');
+     }
+   });
+
+ });
+
+
+
+//view student details(admin)
+app.get('/users', (req, res) => {
+  const sql = 'SELECT username, role FROM users WHERE role=\'student\'';
+  db.query(sql, (err, data) => {
     if (err) {
-      console.error('Error deleting student:', err);
-      res.status(500).send('Error deleting student');
+      res.status(500).json({ error: 'Error fetching student details' });
     } else {
-      console.log('Student deleted:', result);
-      res.status(200).send('Student deleted successfully');
+      res.status(200).json(data);
     }
   });
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
